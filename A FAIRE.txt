@@ -1,0 +1,31 @@
+Regarder pour la sécurité du jeton (dans le navigateur)
+--> Créer une dossier api sur vercel par exemple etc
+OU
+Laisser la clé visible mais savoir le pourquoi du comment
+
+
+Performance du site:
+--> Lighthouse: Score 62
+Probleme:
+1. L'image du héro est trop lourde 1,6MO
+// Utilisation d'une résolution plus basse pour de meilleures performances
+src={`https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`}
+src={`https://image.tmdb.org/t/p/w1280${featuredMovie.backdrop_path}`}
+
+2. Les images w500 sont affichées en 325x488. Téléchargement de plus de pixel que nécessaire.
+src={apitmdb.getImageUrl(movie.poster_path, "w500")}
+src={apitmdb.getImageUrl(movie.poster_path, "w342")}
+
+
+
+=> Ces deux lignes sont des indices de performance (Resource Hints). 
+Elles servent à dire au navigateur : "Prépare-toi, on va bientôt avoir besoin de parler à ces serveurs, ne perds pas de temps !"
+Sans ces lignes, le navigateur attend de voir une image ou un appel API dans ton code JavaScript pour commencer à s'en occuper. 
+Avec ces lignes, il gagne une étape cruciale.
+<link rel="preconnect" href="https://image.tmdb.org">
+<link rel="preconnect" href="https://api.themoviedb.org">
+
+
+Notion de SEO:
+--> public/robot.txt
+--> alt pour les images
