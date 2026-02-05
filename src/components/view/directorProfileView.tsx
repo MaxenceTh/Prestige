@@ -1,7 +1,8 @@
 import apitmdb, { type Movie } from "@/api/tmdbApi";
 import { Clapperboard, Film } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MovieGrid } from "../ui/movieGrid";
+import { formatDirectorCredits } from "@/lib/movie-utils";
 
 interface Props {
   directorId: number;
@@ -10,7 +11,6 @@ interface Props {
 
 export function DirectorProfileView({ directorId, onMovieClick }: Props) {
   const [director, setDirector] = useState<any>(null);
-  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,26 +19,6 @@ export function DirectorProfileView({ directorId, onMovieClick }: Props) {
       try {
         const data = await apitmdb.getPersonDetails(directorId);
         setDirector(data);
-
-        // 1. On récupère le "crew" (équipe technique)
-        const crew = data.movie_credits.crew || [];
-
-        // 2. On filtre pour ne garder que les films réalisés ("Director")
-        const directedMovies = crew.filter((m: any) => m.job === "Director");
-
-        // 3. Filtrage des doublons (si un film apparaît plusieurs fois)
-        const uniqueMovies = Array.from(
-          new Map<number, Movie>(directedMovies.map((m: any) => [m.id, m])).values()
-        );
-
-        // 4. Tri par date de sortie (plus récent en premier)
-        const sorted = uniqueMovies.sort((a, b) => {
-          const dateB = b.release_date ? new Date(b.release_date).getTime() : 0;
-          const dateA = a.release_date ? new Date(a.release_date).getTime() : 0;
-          return dateB - dateA;
-        });
-
-        setMovies(sorted);
       } catch (error) {
         console.error("Erreur DirectorView:", error);
       } finally {
@@ -47,6 +27,13 @@ export function DirectorProfileView({ directorId, onMovieClick }: Props) {
     };
     fetchData();
   }, [directorId]);
+
+ const sortedMovies = useMemo(() => {
+  return director?.movie_credits?.crew 
+    ? formatDirectorCredits(director.movie_credits.crew) 
+    : [];
+}, [director]);
+
 
   if (loading) {
     return (
@@ -89,7 +76,7 @@ export function DirectorProfileView({ directorId, onMovieClick }: Props) {
             <div className="flex flex-col gap-1">
               <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Réalisations</span>
               <span className="text-sm text-white font-medium flex items-center gap-2">
-                <Film className="w-3 h-3 text-primary" /> {movies.length} Films
+                <Film className="w-3 h-3 text-primary" /> {sortedMovies.length} Films
               </span>
             </div>
           </div>
@@ -110,8 +97,8 @@ export function DirectorProfileView({ directorId, onMovieClick }: Props) {
           <div className="h-px flex-1 bg-linear-to-r from-white/10 to-transparent"></div>
         </div>
 
-        {movies.length > 0 ? (
-          <MovieGrid movies={movies} loading={false} onMovieClick={onMovieClick} />
+        {sortedMovies.length > 0 ? (
+          <MovieGrid movies={sortedMovies} loading={false} onMovieClick={onMovieClick} />
         ) : (
           <div className="py-20 text-center bg-white/5 rounded-3xl border border-dashed border-white/10">
             <p className="text-muted-foreground text-sm italic">Aucun film trouvé en tant que réalisateur.</p>

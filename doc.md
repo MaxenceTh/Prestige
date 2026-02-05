@@ -41,3 +41,8 @@ On l'utilise quand on a besoin de "Préparer" la donnée avant de l'afficher (ex
   );
 })}
 ```
+
+1. Synchrone vs Asynchrone
+useEffect est "après-coup" : React affiche le composant, puis lance l'effet, puis modifie l'état, ce qui provoque un deuxième rendu. C'est un cycle supplémentaire inutile pour une simple transformation de liste.
+
+useMemo est "pendant" : React calcule la valeur pendant qu'il est en train de préparer le rendu. Il n'y a pas de rendu intermédiaire "vide" ou "non trié".
