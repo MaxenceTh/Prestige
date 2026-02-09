@@ -105,3 +105,14 @@ C'est l'aboutissement. Vos modifications sont officiellement fusionnées dans la
 * **Pourquoi :** Votre fonctionnalité est maintenant intégrée et fait officiellement partie du produit.
 
 ---
+
+npm install -D vitest @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom
+vitest : Le lanceur de tests (ton "moteur").
+
+jsdom : Simule un navigateur (DOM) dans ton terminal pour que React puisse s'y "afficher".
+
+@testing-library/react : L'outil principal pour manipuler tes composants (render, findByText, etc.).
+
+@testing-library/jest-dom : Ajoute des comparateurs très pratiques comme .toBeInTheDocument() ou .toHaveClass().
+
+@testing-library/user-event : Plus précis que fireEvent, il simule de vrais clics et saisies clavier comme un humain.

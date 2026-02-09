@@ -1,6 +1,6 @@
 // components/movies/MovieGrid.tsx
 import type { Movie } from "@/api/tmdbApi";
-import { MovieCard } from "./movieCard";
+import { MovieCard } from "./movieCard/movieCard";
 import { MovieGridSkeleton } from "../skeletons/movieGridSkeleton";
 
 

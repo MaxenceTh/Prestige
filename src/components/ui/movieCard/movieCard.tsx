@@ -2,7 +2,7 @@
 import { Star, Info } from "lucide-react";
 import type { Movie } from "@/api/tmdbApi";
 import apitmdb from "@/api/tmdbApi";
-import { FadeImage } from "../skeletons/fadeImage";
+import { FadeImage } from "../../skeletons/fadeImage";
 
 interface MovieCardProps {
   movie: Movie;
