@@ -128,7 +128,6 @@ const apitmdb = {
       const response = await tmdbClient.get(`/movie/${movieId}/videos`, {
         params: { language: 'en-US' } // Les trailers sont souvent mieux indexés en anglais
       });
-      console.log("Vidéos reçues:", response.data.results);
       return response.data.results;
     } catch (error) {
       console.error("Erreur vidéos:", error);
