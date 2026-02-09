@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react' // 1. On importe lazy et Suspense
 import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/sections/navbar'
+import {Navbar} from './components/sections/navbar'
 
 // 2. On remplace les imports statiques par des imports dynamiques (lazy)
 import Hero from './components/sections/hero'
