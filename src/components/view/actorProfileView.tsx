@@ -1,8 +1,9 @@
 import apitmdb, { type Movie } from "@/api/tmdbApi";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Film, User } from "lucide-react";
 import { MovieGrid } from "../ui/movieGrid";
+import { formatActorCredits} from "@/lib/movie-utils";
 
 interface Props {
   actorId: number;
@@ -11,7 +12,6 @@ interface Props {
 
 export function ActorProfileView({ actorId, onMovieClick }: Props) {
   const [actor, setActor] = useState<any>(null);
-  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,21 +19,7 @@ export function ActorProfileView({ actorId, onMovieClick }: Props) {
       setLoading(true);
       try {
         const data = await apitmdb.getPersonDetails(actorId);
-        setActor(data);
-
-        // Nettoyage des doublons et tri par date de sortie
-        const rawCast = data.movie_credits.cast;
-        const uniqueMovies = Array.from(
-          new Map<number, Movie>(rawCast.map((m: any) => [m.id, m])).values()
-        );
-
-        const sorted = uniqueMovies.sort((a, b) => {
-          const dateB = b.release_date ? new Date(b.release_date).getTime() : 0;
-          const dateA = a.release_date ? new Date(a.release_date).getTime() : 0;
-          return dateB - dateA;
-        });
-
-        setMovies(sorted);
+        setActor(data);       
       } catch (error) {
         console.error(error);
       } finally {
@@ -42,6 +28,11 @@ export function ActorProfileView({ actorId, onMovieClick }: Props) {
     };
     fetchData();
   }, [actorId]);
+
+  const sortedMovies = useMemo(() => {
+    if (!actor?.movie_credits?.cast) return [];
+    return formatActorCredits(actor.movie_credits.cast);
+  }, [actor]);
 
   if (loading) return <div className="py-20 text-center animate-pulse text-primary tracking-widest">CHARGEMENT DU PROFIL...</div>;
 
@@ -62,7 +53,7 @@ export function ActorProfileView({ actorId, onMovieClick }: Props) {
 
           <div className="flex flex-wrap justify-center md:justify-start gap-6 text-[10px] text-muted-foreground uppercase tracking-widest border-y border-white/5 py-4">
             <span className="flex items-center gap-2"><User className="w-3 h-3 text-primary" /> Acteur</span>
-            <span className="flex items-center gap-2"><Film className="w-3 h-3 text-primary" /> {movies.length} Films</span>
+            <span className="flex items-center gap-2"><Film className="w-3 h-3 text-primary" /> {sortedMovies.length} Films</span>
           </div>
 
           <p className="text-muted-foreground leading-relaxed text-sm italic max-w-2xl">
@@ -74,7 +65,7 @@ export function ActorProfileView({ actorId, onMovieClick }: Props) {
       {/* FILMOGRAPHIE */}
       <div className="space-y-8">
         <h3 className="text-2xl font-serif text-white">Filmographie</h3>
-        <MovieGrid movies={movies} loading={false} onMovieClick={onMovieClick} />
+        <MovieGrid movies={sortedMovies} loading={false} onMovieClick={onMovieClick} />
       </div>
     </div>
   );
