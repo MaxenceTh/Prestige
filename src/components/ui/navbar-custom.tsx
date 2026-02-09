@@ -55,7 +55,7 @@ export function SearchBar({ onMovieSelect }: SearchBarProps) {
 
       {/* RÉSULTATS DÉROULANTS */}
       {results.length > 0 && (
-        <div className="absolute top-full mt-2 w-full bg-background/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2">
+        <div className="absolute top-full mt-2 w-full bg-background/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 z-[10000]">
           {results.map((movie) => (
             <button
               key={movie.id}
