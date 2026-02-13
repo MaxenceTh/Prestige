@@ -7,7 +7,7 @@
 Une plateforme immersive pour explorer l'univers du cinéma en temps réel, utilisant l'API **TMDB**. L'application propose une interface fluide, des performances optimisées et une gestion intelligente des données cinématographiques.
 
 ## 🔗 Liens
-- **Site en ligne :** [Visiter CinemaTMDB Explorer](https://prestige-cinema.vercel.app/)
+- **Site en ligne :** [Visiter CinemaTMDB Explorer](https://prestige-cinema.vercel.app/).
 
 ---
 
