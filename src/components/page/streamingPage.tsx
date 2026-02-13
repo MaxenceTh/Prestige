@@ -90,7 +90,7 @@ export function StreamingPage() {
     setPage(newPage);
   };
   return (
-    <main className="min-h-screen bg-background py-24" id="movie-section">
+    <main className="min-h-screen bg-background " id="movie-section">
 
       {/* 1. CONTENU CATALOGUE (Affiche si view.type === 'all') */}
       {view.type === 'all' ? (
