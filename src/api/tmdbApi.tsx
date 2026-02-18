@@ -66,14 +66,18 @@ const apitmdb = {
           language: 'fr-FR',
           page: page,
           region: 'FR',
+          // Date de départ : aujourd'hui
           "primary_release_date.gte": today,
-          "primary_release_date.lte": endDate, // On évite les films prévus en 2028
-          sort_by: "popularity.desc",
-          "vote_count.gte": 2,
-          // Optionnel : On s'assure que le film sort bien au cinéma (type 3)
-          "with_release_type": "3|2"
+          // Date de fin : + 1 an maximum pour rester pertinent
+          "primary_release_date.lte": endDate,
+          sort_by: "popularity.desc",        
+          "with_release_type": "2|3",
+          // LE NETTOYAGE : Éviter les documentaires ou les vidéos de concerts
+          "without_genres": "99,10402",
         }
       });
+      console.log(response.data.results);
+      console.log("Films à venir récupérés:", response.data.results.map((movie) => movie.title));
       return response.data;
     } catch (error) {
       console.error("Erreur TMDB:", error);
