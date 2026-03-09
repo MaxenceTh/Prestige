@@ -104,7 +104,7 @@ export function MovieDialog({ movie: basicMovie, isOpen, onClose, onViewProfile 
               <div className="aspect-video md:h-full">
                 <iframe
                   src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0&modestbranding=1`}
-                  className="w-full h-full border-0"
+                  className="w-full md:w-lg h-full border-0"
                   allow="autoplay; encrypted-media"
                   allowFullScreen
                 />
